@@ -1,0 +1,19 @@
+lookback_hours: 72
+max_per_site: 2
+
+sites:
+  - name: Colossal
+    type: rss
+    url: "https://www.thisiscolossal.com/feed/"
+
+  - name: Collater.al
+    type: rss
+    url: "https://www.collater.al/feed/"
+
+  - name: Creative Boom
+    type: rss
+    url: "https://www.creativeboom.com/feed/"
+
+  - name: Illustration.lol
+    type: html
+    url: "https://www.illustration.lol/"
