@@ -1,5 +1,5 @@
 lookback_hours: 72
-max_per_site: 2
+max_per_site: 4
 
 sites:
   - name: Colossal
