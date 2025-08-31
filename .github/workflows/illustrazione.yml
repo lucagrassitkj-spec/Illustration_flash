@@ -1,0 +1,40 @@
+name: Illustrazione Bot
+
+on:
+  schedule:
+    - cron: "0 10 */3 * *"  # Ogni 3 giorni alle 12:00 Europe/Rome (10:00 UTC)
+  workflow_dispatch:
+
+jobs:
+  illustrazione:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run summarizer
+        run: python illustration_summarizer.py
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: illustrazione-flash
+          path: output/*.txt
+
+      - name: Send to Telegram
+        run: |
+          for file in output/*.txt; do
+            echo "Invio file $file a Telegram..."
+            curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage               -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}               -d text="$(head -c 3900 $file)"
+          done
