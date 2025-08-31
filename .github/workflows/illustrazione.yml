@@ -36,14 +36,13 @@ jobs:
       - name: Send each article separately to Telegram
         run: |
           for file in output/*.txt; do
-            echo "Invio articoli da $file a Telegram..."
+            echo "Invio solo link con preview da $file a Telegram..."
             while IFS= read -r line; do
-              if [ -n "$line" ]; then
-                # Estrae solo il link (assumendo che sia l’ultima riga di ogni articolo)
-                url=$(echo "$line" | tail -n1)
+              # Invia solo righe che contengono link
+              if [[ "$line" =~ ^https?:// ]]; then
                 curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
                   -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-                  -d text="$url"
+                  -d text="$line"
                 sleep 2
               fi
             done < "$file"
